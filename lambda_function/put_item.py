@@ -24,9 +24,12 @@ def lambda_handler(event, context):
         TableName=table_name,
         Item=item_data
     )
-    print(response)
+    return {
+        'statusCode': 200,
+        'body': response
+    }
 
 
 if __name__ == "__main__":
-    lambda_handler([], [])
-
+    x = lambda_handler([], [])
+    print(x)

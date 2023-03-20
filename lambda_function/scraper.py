@@ -1,17 +1,27 @@
 import requests
+import json
 from bs4 import BeautifulSoup
 
-# send a GET request to the website
-response = requests.get('https://www.fractalslab.com/courses/bangla-course-on-aws-serverless')
 
-# parse the HTML content using BeautifulSoup
-soup = BeautifulSoup(response.content, 'html.parser')
+def lambda_handler(event, context):
+    url = event['url']
+    response = requests.get(url)
 
-# find the page title
-title = soup.title.string
+    soup = BeautifulSoup(response.text, 'html.parser')
+    data_list = []
+    for job_title, exp_text in zip(soup.select('.job-title-text a'), soup.select('.exp-text-d')):
+        data = {'Job Title': job_title.text.strip(), 'Experience': exp_text.text.strip()}
+        data_list.append(data)
 
-# print the results
-print(f'Title: {title}')
+    return {
+        'statusCode': 200,
+        'body': data_list
+    }
 
 
-
+if __name__ == "__main__":
+    event = {
+      "url": "https://jobs.bdjobs.com/jobsearch.asp?fcatId=8&icatId="
+    }
+    x = lambda_handler(event, [])
+    print(x)
