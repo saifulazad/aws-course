@@ -7,7 +7,8 @@ from boto3.dynamodb.conditions import Key
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table('e-commerce')
 
-resp = table.query(KeyConditionExpression=Key('attr_key').eq('order::ORD-3434') & Key('sort_key').begins_with('order_line::'))
+resp = table.query(
+    KeyConditionExpression=Key('attr_key').eq('order::ORD-3434') & Key('sort_key').begins_with('order_line::'))
 
 print("The query returned the following items:")
 for item in resp['Items']:
